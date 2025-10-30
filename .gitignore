@@ -1,0 +1,30 @@
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+
+# Archive files
+*.zip
+*.crx
+*.pem
+
+# Node modules (if you add build tools later)
+node_modules/
+package-lock.json
+
+# Environment files
+.env
+.env.local

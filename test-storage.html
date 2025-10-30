@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Storage Test - Virality Sense</title>
+</head>
+<body>
+  <h1>Virality Sense Storage Test</h1>
+  <button id="checkStorage">Check Storage</button>
+  <button id="addTestVideo">Add Test Video</button>
+  <button id="clearStorage">Clear Storage</button>
+  <pre id="output"></pre>
+
+  <script>
+    const output = document.getElementById('output');
+
+    function log(message) {
+      output.textContent += message + '\n';
+      console.log(message);
+    }
+
+    document.getElementById('checkStorage').addEventListener('click', async () => {
+      output.textContent = '';
+      log('Checking storage...');
+
+      chrome.storage.local.get(['virality_sense_videos'], (result) => {
+        log('Storage result:');
+        log(JSON.stringify(result, null, 2));
+
+        const videos = result.virality_sense_videos || [];
+        log(`\nTotal videos: ${videos.length}`);
+      });
+    });
+
+    document.getElementById('addTestVideo').addEventListener('click', async () => {
+      output.textContent = '';
+      log('Adding test video...');
+
+      const testVideo = {
+        id: 'test123',
+        url: 'https://www.youtube.com/watch?v=test123',
+        platform: 'youtube',
+        title: 'Test Video',
+        author: 'Test Author',
+        savedAt: new Date().toISOString(),
+        thumbnail: '',
+        watchDuration: 45,
+        metrics: {
+          views: 1000000,
+          likes: 50000,
+          comments: 1000
+        }
+      };
+
+      chrome.storage.local.get(['virality_sense_videos'], (result) => {
+        const videos = result.virality_sense_videos || [];
+        videos.push(testVideo);
+
+        chrome.storage.local.set({ virality_sense_videos: videos }, () => {
+          log('Test video added!');
+          log(JSON.stringify(testVideo, null, 2));
+        });
+      });
+    });
+
+    document.getElementById('clearStorage').addEventListener('click', async () => {
+      output.textContent = '';
+      log('Clearing storage...');
+
+      chrome.storage.local.remove(['virality_sense_videos'], () => {
+        log('Storage cleared!');
+      });
+    });
+  </script>
+</body>
+</html>
